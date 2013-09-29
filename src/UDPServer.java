@@ -79,6 +79,12 @@ public class UDPServer{
   int client_port = packet.getPort();
   area.append(" Received "
   +new String(buffer)+" from "+client);
+  String Answer = new String("ok_received"); 
+  byte answer[] = Answer.getBytes();
+  packet = 
+  new DatagramPacket(answer, answer.length,client,client_port);
+  socket.send(packet);
+  //UDPClient answer = new UDPClient(String.valueOf(client),String.valueOf(client_port), "ok_received");
   
   }
   catch(UnknownHostException ue){}

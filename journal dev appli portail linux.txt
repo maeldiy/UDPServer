@@ -1,0 +1,18 @@
+2013 27 09
+Android difficult to handled : difficult to create a real sticky service; difficult to maintain the wifi connection
+new architetue on linux OS :
+A java app : push button GUI + UDP listener
+ 1 shell script to be launched by java app, it will launch firefox to get ipcam stream
+base for java app :
+http://java.about.com/od/creatinguserinterfaces/ss/Example-Java-Code-For-Building-A-Simple-Gui-Application.htm
+http://www.ase.md/~aursu/ClientServerThreads.html
+
+2013 28 09
+success in copying and run udpp server from http://www.roseindia.net/java/example/java/net/udp/udp-server.shtml
+failed while modifying it while attempting to start thread alone (GUI interaction) before adding udp client
+http://www.roseindia.net/java/example/java/net/udp/udp-client.shtml
+
+TO save it in GIT on first run !!!!!
+
+2013 29 09
+create UPDServer project and save it on git, success to launch it automatically and make it work on associated arduino port
