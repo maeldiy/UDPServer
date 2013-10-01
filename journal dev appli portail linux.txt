@@ -16,3 +16,7 @@ TO save it in GIT on first run !!!!!
 
 2013 29 09
 create UPDServer project and save it on git, success to launch it automatically and make it work on associated arduino port
+
+2013 30 09
+add call_request management
+add launch of player & browser
