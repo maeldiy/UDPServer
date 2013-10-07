@@ -1,8 +1,8 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.net.*;
-import java.io.*;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class Phonedoor_daemon{
   Thread thread;
@@ -47,8 +47,11 @@ public class Phonedoor_daemon{
 	  // runtime.exec(new String[] { "wmplayer //play //close K:\\mp3\\doorbell.mp3" } );
 	//  runtime.exec(new String[] { "C:\\Program Files\\Windows Media Player\\wmplayer K:\\mp3\\doorbell.mp3" } );
 	  //runtime.exec(new String[] { "play K:\\mp3\\doorbell.mp3" } );
-					  runtime.exec(new String[] { "C:\\Users\\Loule\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe -profile-directory=\"Profile 1\""} ); // TO DO : define good user
-	  //UDPClient answer = new UDPClient(String.valueOf(client),String.valueOf(client_port), "ok_received");
+//					  runtime.exec(new String[] { "C:\\Users\\Loule\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe -profile-directory=\"Profile 1\""} ); // TO DO : define good user
+					  String url = "http://www.centerkey.com/";
+					  BrowserLauncher.openURL(url);
+					  
+					  //UDPClient answer = new UDPClient(String.valueOf(client),String.valueOf(client_port), "ok_received");
   	}
   
   

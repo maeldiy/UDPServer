@@ -1,6 +1,6 @@
 2013 27 09
-Android difficult to handled : difficult to create a real sticky service; difficult to maintain the wifi connection
-new architetue on linux OS :
+Android difficult to handled : difficult to create a real sticky service; difficult to maintain the wifi connection (of course, difficult for me)
+new architecture on linux OS :
 A java app : push button GUI + UDP listener
  1 shell script to be launched by java app, it will launch firefox to get ipcam stream
 base for java app :
@@ -19,4 +19,13 @@ create UPDServer project and save it on git, success to launch it automatically 
 
 2013 30 09
 add call_request management
-add launch of player & browser
+add launch of browser
+
+2013 05 10
+Create GUI app, void send data to network to be updated
+anyway : both class should be in same project ? having the daemon still alive while closing the GUI could be difficult to manage
+
+2013 07 10
+
+GUI 1.0 "completed" : 5 buttons created with associated UDP message sent while pressed
+TO DO : provide preferences settings to modify GUI size following hardware
