@@ -1,8 +1,13 @@
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
+import sun.audio.*;
+
 
 public class Phonedoor_daemon{
   Thread thread;
@@ -42,8 +47,45 @@ public class Phonedoor_daemon{
 					  packet = 
 							  new DatagramPacket(answer, answer.length,client,client_port);
 					  socket.send(packet);
+					  // launch sound player
+					  try {
+						   // open the sound file as a Java input stream
+						    String gongFile = "K:\\mp3\\70\\CUBA.mp3";
+						    InputStream in = new FileInputStream(gongFile);
+
+						    // create an audiostream from the inputstream
+						    AudioStream audioStream = new AudioStream(in);
+
+						    // play the audio clip with the audioplayer class
+						    AudioPlayer.player.start(audioStream);
+						    
+						    
+						 
+						/*    
+						   AudioInputStream stream;
+						    AudioFormat format;
+						    DataLine.Info info;
+						    Clip clip;
+						   
+						    stream = AudioSystem.getAudioInputStream(yourFile);
+						    System.err.println(stream );
+						    format = stream.getFormat();
+						    System.err.println(format );
+						    info = new DataLine.Info(Clip.class, format);
+						    
+						    clip = (Clip) AudioSystem.getLine(info);
+						    
+						    clip.open(stream);
+						    clip.start();
+						*/
+						}
+						catch (Exception e) {
+							System.err.println(e);
+						}
+					  
 	  // Launching apps, i.e executing task ;-)
 					  Runtime runtime = Runtime.getRuntime();
+					  
 	  // runtime.exec(new String[] { "wmplayer //play //close K:\\mp3\\doorbell.mp3" } );
 	//  runtime.exec(new String[] { "C:\\Program Files\\Windows Media Player\\wmplayer K:\\mp3\\doorbell.mp3" } );
 	  //runtime.exec(new String[] { "play K:\\mp3\\doorbell.mp3" } );
