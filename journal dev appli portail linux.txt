@@ -34,3 +34,13 @@ TO DO : provide preferences settings to modify GUI size following hardware
 2013 08 10
 Added sound player to daemon (fix file settings)
 To DO : file path defined in a file, can be edited trough the GUI
+
+2013 09 10
+Added capability to launch the GUI. GUI imported into dameon as an executable JAR file (export from Eclipse).
+issue : imported as "udp_server.jar" instead of "GUI.jar" : to be investigated
+other issue : not launch as front window
+
+2013 11 10
+Added file settings , fixed path to be defined : 1 for windows, 1 for linux
+to do  : add exception management message " could not find file settings"
+mp3 file type very sensitive
