@@ -5,9 +5,12 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -19,25 +22,55 @@ import sun.audio.AudioStream;
 public class Phonedoor_daemon{
   Thread thread;
   DatagramSocket socket;
-
+  List<String> lignes = null; // init of List<String> for file parameter reading
+  int OS = 0;
+  byte[] buffer = new byte[1024];
+  int port = 5650;
+  String audiofilepath = null;
   public static void main(String[] args) {
 	  Phonedoor_daemon u = new Phonedoor_daemon();
+	  
   }
   public Phonedoor_daemon(){
 	  new StartThread();
   }
+  
   public class StartThread implements Runnable{
+	 
   StartThread(){
   thread = new Thread(this);
   thread.start();
 
   }
   public void run(){
+
   try{
-	  byte[] buffer = new byte[1024];
-	  int port = 5650;
 	  try{
 		  socket = new DatagramSocket(port);
+// read all parameter once from file		  
+		// Determining OS
+		  OS = PlatformDetector.detect();
+//		  try {
+			  //for test : read parameters from text file 
+			  if (OS == PlatformDetector.WINDOWS){
+                  lignes = Files.readAllLines(FileSystems.getDefault().getPath("C:\\Phone_door\\config.txt"), StandardCharsets.ISO_8859_1);  //iso 8859 for windows , utf-8 for linux
+			      audiofilepath = lignes.get(1); //"K:\\mp3\\70\\CUBA.mp3";
+			      System.out.println(audiofilepath);
+					}
+			  else {
+				  lignes = Files.readAllLines(FileSystems.getDefault().getPath("/etc/config.txt"), StandardCharsets.UTF_8);  //iso 8859 for windows , utf-8 for linux
+				  audiofilepath = lignes.get(3); //"K:\\mp3\\70\\CUBA.mp3";
+			      System.out.println(audiofilepath);
+			  }
+ 	  }
+
+		  catch (Exception e) {
+					JOptionPane.showMessageDialog(null,"error, perhaps  could not find file settings" + 
+			             ":\n" + e.getLocalizedMessage());
+				System.err.println(e);
+			}
+	  
+		  //waiting for call request	  
 		  while(true){
 			  try{
   //Receive request from client
@@ -54,61 +87,37 @@ public class Phonedoor_daemon{
 					  packet = 
 							  new DatagramPacket(answer, answer.length,client,client_port);
 					  socket.send(packet);
-		  // Determining OS Launching GUI 		
-				//	  Runtime runtime = Runtime.getRuntime();
-					  int OS = PlatformDetector.detect();
-					    try {
-					        if (OS == PlatformDetector.WINDOWS)
-					        	Runtime.getRuntime().exec(new String[] {"java -jar GUI.jar"});
-					        else { // assume Unix or Linux
-					        Runtime.getRuntime().exec(new String[] { "wmplayer //play //close K:\\mp3\\doorbell.mp3" } );
-					        }
-					      } catch (Exception e) {
-					        JOptionPane.showMessageDialog(null,
-					             ":\n" + e.getLocalizedMessage());
-					      }		
+		  //  Launching GUI 		
+					  PhoneDoor_GUI a = new PhoneDoor_GUI(lignes);
 					    // launch sound player
-					  try {
-						  //for test : read parameters from text file 
-			        		final List<String> lignes = Files.readAllLines(FileSystems.getDefault().getPath("C:\\Phone_door\\config.txt"), StandardCharsets.ISO_8859_1);  //iso 8859 for windows , utf-8 for linux
-			        		String audiofilepath = lignes.get(1);
-			        		System.out.println("bla bla" + audiofilepath);
-						  
-						  // open the sound file as a Java input stream
-						   	String gongFile = audiofilepath;//"K:\\mp3\\70\\CUBA.mp3";
-						   	System.out.println(gongFile);
-						    InputStream in = new FileInputStream(gongFile);
+					  	  
+					  						  // open the sound file as a Java input stream
+						 
+						    InputStream in = new FileInputStream(audiofilepath);
 						    // create an audiostream from the inputstream
 						    AudioStream audioStream = new AudioStream(in);
 						    // play the audio clip with the audioplayer class
-						    AudioPlayer.player.start(audioStream);
-						}
-						catch (Exception e) {
-								JOptionPane.showMessageDialog(null,"error" + 
-						             ":\n" + e.getLocalizedMessage());
-							System.err.println(e);
-						}	
+						    AudioPlayer.player.start(audioStream);	
 					  // Launching browser
 					  String url = "http://www.wikipedia.com/";
 					  BrowserLauncher.openURL(url);
-
-  	}
-  }
-  catch(UnknownHostException ue){					
-		JOptionPane.showMessageDialog(null,"error eerh" + 
+				  }
+			  }
+			  catch(UnknownHostException ue){					
+				  JOptionPane.showMessageDialog(null,"error eerh" + 
           ":\n" + ue.getLocalizedMessage());}
-  }
+		  }
   }
   catch(java.net.BindException b){
 		JOptionPane.showMessageDialog(null,"error eeeee" + 
 	             ":\n" + b.getLocalizedMessage());
   }
-  }
+  
   catch (IOException e){
 	  JOptionPane.showMessageDialog(null,"error aaaa" + 
 	             ":\n" + e.getLocalizedMessage());
   System.err.println(e);
   }
   }
-  }
 }
+}  

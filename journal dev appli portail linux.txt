@@ -44,3 +44,11 @@ other issue : not launch as front window
 Added file settings , fixed path to be defined : 1 for windows, 1 for linux
 to do  : add exception management message " could not find file settings"
 mp3 file type very sensitive
+
+2013 12 10
+merge GUI class into phonedoor service projet
+
+2013 13 10
+add GUI size reading insettings
+add linux audio file path settings (not checked probably wrong)
+install swing plugin to add file reading to select audio file
