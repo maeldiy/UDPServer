@@ -41,7 +41,7 @@ issue : imported as "udp_server.jar" instead of "GUI.jar" : to be investigated
 other issue : not launch as front window
 
 2013 11 10
-Added file settings , fixed path to be defined : 1 for windows, 1 for linux
+Added file settings, fixed path to be defined : 1 for windows, 1 for linux
 to do  : add exception management message " could not find file settings"
 mp3 file type very sensitive
 
@@ -52,3 +52,9 @@ merge GUI class into phonedoor service projet
 add GUI size reading insettings
 add linux audio file path settings (not checked probably wrong)
 install swing plugin to add file reading to select audio file
+Jchooser to be implemented for audio file selection
+
+2013 14 10
+add audiofile chooser on the GUI
+the app launches once, then doesn't work. To be fixed
+TO DO : launch web browser on the camera

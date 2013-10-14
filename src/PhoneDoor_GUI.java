@@ -1,6 +1,6 @@
-import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -10,14 +10,18 @@ import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class PhoneDoor_GUI{
   boolean debug = true;	
@@ -175,28 +179,42 @@ public class PhoneDoor_GUI{
   button4.setEnabled(true);
   panel.add(button4);
 //button5 settings and usage  
-  button5 = new JButton("SPARE 2");
+  button5 = new JButton("audio file");
   button5.setBounds(10, 530, 320, 40);
   button5.addActionListener(new ActionListener(){
   public void actionPerformed (ActionEvent ae){
-	  try {
-			InetAddress serverAddr = InetAddress.getByName(SERVERIP);
-			socketout = new DatagramSocket();
-			socketout.connect(serverAddr,SERVERPORT);
-			SendDataToNetwork( "button SPARE 2 pressed",socketout,serverAddr, SERVERPORT);
-			area.append("\n SPARE 2"); 
-			} catch (UnknownHostException e1) {
-				JOptionPane.showMessageDialog(null,
-			             ":\n" + e1.getLocalizedMessage());
-			e1.printStackTrace();
-			} catch (SocketException e) {
-				 JOptionPane.showMessageDialog(null,"socket problem" + 
-			             ":\n" + e.getLocalizedMessage());
-			} catch(Exception error){
-		    System.out.print("could't to connect to server because : " + error.getMessage());
-		  }	
-		  }
-  
+	  JFileChooser chooser = new JFileChooser();
+	    File f;
+		try {
+			f = new File(new File("audio.mp3").getCanonicalPath()); 
+			chooser.setSelectedFile(f);
+			chooser.showOpenDialog(null);
+			File Newaudiofilepath = chooser.getSelectedFile();
+			JOptionPane.showMessageDialog(null,"fichier ouvert" + 
+		             ":\n" + Newaudiofilepath);
+				  try{
+					// Determining OS
+					  OS = PlatformDetector.detect();
+						  if (OS == PlatformDetector.WINDOWS){
+			                  	lignes.set(1, String.valueOf(Newaudiofilepath));
+			                  	 Files.write(FileSystems.getDefault().getPath("C:\\Phone_door\\config.txt"), lignes, StandardCharsets.ISO_8859_1);
+								}
+						  else {
+							    lignes.set(3, String.valueOf(Newaudiofilepath));
+							    Files.write(FileSystems.getDefault().getPath("/etc/config.txt"), lignes, StandardCharsets.UTF_8);
+						  }
+			 	  }
+				  catch (Exception e) {
+								JOptionPane.showMessageDialog(null,"error, couldnt write to file" + 
+						             ":\n" + e.getLocalizedMessage());
+							System.err.println(e);
+						}
+    
+		  } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+  }
   });
   button5.setEnabled(true);
   panel.add(button5);

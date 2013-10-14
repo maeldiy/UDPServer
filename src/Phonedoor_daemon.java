@@ -56,6 +56,7 @@ public class Phonedoor_daemon{
                   lignes = Files.readAllLines(FileSystems.getDefault().getPath("C:\\Phone_door\\config.txt"), StandardCharsets.ISO_8859_1);  //iso 8859 for windows , utf-8 for linux
 			      audiofilepath = lignes.get(1); //"K:\\mp3\\70\\CUBA.mp3";
 			      System.out.println(audiofilepath);
+			  
 					}
 			  else {
 				  lignes = Files.readAllLines(FileSystems.getDefault().getPath("/etc/config.txt"), StandardCharsets.UTF_8);  //iso 8859 for windows , utf-8 for linux
@@ -87,8 +88,10 @@ public class Phonedoor_daemon{
 					  packet = 
 							  new DatagramPacket(answer, answer.length,client,client_port);
 					  socket.send(packet);
-		  //  Launching GUI 		
+					  //  Launching GUI 
+					  
 					  PhoneDoor_GUI a = new PhoneDoor_GUI(lignes);
+					
 					    // launch sound player
 					  	  
 					  						  // open the sound file as a Java input stream
