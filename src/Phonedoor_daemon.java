@@ -88,9 +88,7 @@ public class Phonedoor_daemon{
 					  packet = 
 							  new DatagramPacket(answer, answer.length,client,client_port);
 					  socket.send(packet);
-					  //  Launching GUI 
-					  
-					  PhoneDoor_GUI a = new PhoneDoor_GUI(lignes);
+
 					
 					    // launch sound player
 					  	  
@@ -101,9 +99,29 @@ public class Phonedoor_daemon{
 						    AudioStream audioStream = new AudioStream(in);
 						    // play the audio clip with the audioplayer class
 						    AudioPlayer.player.start(audioStream);	
-					  // Launching browser
-					  String url = "http://www.wikipedia.com/";
-					  BrowserLauncher.openURL(url);
+					  // Launching viewer
+						    if (OS == PlatformDetector.WINDOWS){
+				            Runtime runtime = Runtime.getRuntime();
+						     runtime.exec(new String[] { "C:\\Users\\Loule\\AppData\\Local\\VirtualStore\\Program Files\\Xeoma\\xeoma.exe"} ); 
+				           // runtime.exec(new String[] { "C:\\Program Files\\Deskshare\\IP Camera Viewer 1.0\\IP Camera Viewer.exe"} );
+						    //entering sleep mode command, no need for windows device ; if the system runs it's because someone is on						    
+				//		    Runtime.getRuntime().exec("rundll32.exe powrprof.dll,SetSuspendState 0,1,0"); 
+
+						    ;
+						   
+						   									}
+							  else { Runtime runtime = Runtime.getRuntime();
+							    runtime.exec(new String[] { "motion -c motion.conf" } ); // could use zoneminder alternitavely ?
+							    runtime.exec(new String[] { "xfcse-screensaver" }); // see http://ubuntuforums.org/showthread.php?t=1810262 for scrrensaver enable/disabele
+							//    sudo shutdown -s now
+							  }
+
+					  //  Launching GUI 
+						 
+					  
+					  PhoneDoor_GUI a = new PhoneDoor_GUI(lignes);						    
+
+					  //System.exit(0)
 				  }
 			  }
 			  catch(UnknownHostException ue){					
