@@ -72,3 +72,9 @@ DWTFL added in root directory
 replace ip camera viewer by xeoma, much more friendly 
 
 
+2013 26 10
+add possibility to launch the GUI alone : may not work (unable to lauch 2 process on same port ;-( )
+the GUI launcher would launch a copy of the GUI
+MAJOR issue : unable to play sound when program is lauchned outside Eclipe IDE
+
+

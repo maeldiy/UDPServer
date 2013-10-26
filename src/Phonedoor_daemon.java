@@ -81,6 +81,11 @@ public class Phonedoor_daemon{
 				  InetAddress client = packet.getAddress();
 				  int client_port = packet.getPort();
 				  String donnees_recues = new String(buffer);
+				  // GUI launch alone for settings
+				  if (donnees_recues.contains("GUI")) {
+					  PhoneDoor_GUI a = new PhoneDoor_GUI(lignes);	
+				  }
+				  // Launch app
 				  if (donnees_recues.contains("end_request_calls")) {
 					  // Sending acknowledge
 					  String Answer = new String("OKFROMTAB"); 
@@ -88,12 +93,11 @@ public class Phonedoor_daemon{
 					  packet = 
 							  new DatagramPacket(answer, answer.length,client,client_port);
 					  socket.send(packet);
-
-					
-					    // launch sound player
-					  	  
+					  //  Launching GUI 
+					  PhoneDoor_GUI a = new PhoneDoor_GUI(lignes);						    
+					  //System.exit(0)
+					    // launch sound player					  	  
 					  						  // open the sound file as a Java input stream
-						 
 						    InputStream in = new FileInputStream(audiofilepath);
 						    // create an audiostream from the inputstream
 						    AudioStream audioStream = new AudioStream(in);
@@ -103,25 +107,16 @@ public class Phonedoor_daemon{
 						    if (OS == PlatformDetector.WINDOWS){
 				            Runtime runtime = Runtime.getRuntime();
 						     runtime.exec(new String[] { "C:\\Users\\Loule\\AppData\\Local\\VirtualStore\\Program Files\\Xeoma\\xeoma.exe"} ); 
-				           // runtime.exec(new String[] { "C:\\Program Files\\Deskshare\\IP Camera Viewer 1.0\\IP Camera Viewer.exe"} );
 						    //entering sleep mode command, no need for windows device ; if the system runs it's because someone is on						    
 				//		    Runtime.getRuntime().exec("rundll32.exe powrprof.dll,SetSuspendState 0,1,0"); 
-
-						    ;
-						   
-						   									}
+						   	  }
 							  else { Runtime runtime = Runtime.getRuntime();
-							    runtime.exec(new String[] { "motion -c motion.conf" } ); // could use zoneminder alternitavely ?
-							    runtime.exec(new String[] { "xfcse-screensaver" }); // see http://ubuntuforums.org/showthread.php?t=1810262 for scrrensaver enable/disabele
+							  	runtime.exec(new String[] { "vlc -vvv http://192.168.0.10/cgi/mjpg/mjpeg.cgi?.mjpeg &"});
+							   // runtime.exec(new String[] { "motion -c motion.conf &"} ); // could use zoneminder alternitavely ?
+							    runtime.exec(new String[] { "xfcse-screensaver &" }); // see http://ubuntuforums.org/showthread.php?t=1810262 for scrrensaver enable/disabele
 							//    sudo shutdown -s now
 							  }
 
-					  //  Launching GUI 
-						 
-					  
-					  PhoneDoor_GUI a = new PhoneDoor_GUI(lignes);						    
-
-					  //System.exit(0)
 				  }
 			  }
 			  catch(UnknownHostException ue){					
