@@ -1,3 +1,5 @@
+import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -5,18 +7,25 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
+import javax.media.CannotRealizeException;
+import javax.media.Manager;
+import javax.media.NoPlayerException;
+import javax.media.Player;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JOptionPane;
 
+import com.sun.media.codec.audio.mp3.JavaDecoder;
+
 import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
 
 
 public class Phonedoor_daemon{
@@ -26,7 +35,7 @@ public class Phonedoor_daemon{
   int OS = 0;
   byte[] buffer = new byte[1024];
   int port = 5650;
-  String audiofilepath = null;
+  public String audiofilepath = null;
   public static void main(String[] args) {
 	  Phonedoor_daemon u = new Phonedoor_daemon();
 	  
@@ -47,6 +56,7 @@ public class Phonedoor_daemon{
   try{
 	  try{
 		  socket = new DatagramSocket(port);
+//		  socket = new DatagramSocket(port);
 // read all parameter once from file		  
 		// Determining OS
 		  OS = PlatformDetector.detect();
@@ -54,13 +64,13 @@ public class Phonedoor_daemon{
 			  //for test : read parameters from text file 
 			  if (OS == PlatformDetector.WINDOWS){
                   lignes = Files.readAllLines(FileSystems.getDefault().getPath("C:\\Phone_door\\config.txt"), StandardCharsets.ISO_8859_1);  //iso 8859 for windows , utf-8 for linux
-			      audiofilepath = lignes.get(1); //"K:\\mp3\\70\\CUBA.mp3";
+			      audiofilepath = lignes.get(1); 
 			      System.out.println(audiofilepath);
 			  
 					}
 			  else {
-				  lignes = Files.readAllLines(FileSystems.getDefault().getPath("/etc/config.txt"), StandardCharsets.UTF_8);  //iso 8859 for windows , utf-8 for linux
-				  audiofilepath = lignes.get(3); //"K:\\mp3\\70\\CUBA.mp3";
+				  lignes = Files.readAllLines(FileSystems.getDefault().getPath("/home/mael/config.txt"), StandardCharsets.UTF_8);  //iso 8859 for windows , utf-8 for linux
+				  audiofilepath = lignes.get(3); 
 			      System.out.println(audiofilepath);
 			  }
  	  }
@@ -81,6 +91,9 @@ public class Phonedoor_daemon{
 				  InetAddress client = packet.getAddress();
 				  int client_port = packet.getPort();
 				  String donnees_recues = new String(buffer);
+				  // debug
+				  //			  JOptionPane.showMessageDialog(null,"donnees_recues  " + 
+		//		          ":\n" + donnees_recues);
 				  // GUI launch alone for settings
 				  if (donnees_recues.contains("GUI")) {
 					  PhoneDoor_GUI a = new PhoneDoor_GUI(lignes);	
@@ -98,11 +111,13 @@ public class Phonedoor_daemon{
 					  //System.exit(0)
 					    // launch sound player					  	  
 					  						  // open the sound file as a Java input stream
-						    InputStream in = new FileInputStream(audiofilepath);
+						    InputStream in = new FileInputStream(audiofilepath); 
+						    File f=new File(audiofilepath);
 						    // create an audiostream from the inputstream
-						    AudioStream audioStream = new AudioStream(in);
-						    // play the audio clip with the audioplayer class
-						    AudioPlayer.player.start(audioStream);	
+						    final Player p=Manager.createRealizedPlayer(f.toURI().toURL());
+						    // Start the music
+						    p.start();
+
 					  // Launching viewer
 						    if (OS == PlatformDetector.WINDOWS){
 				            Runtime runtime = Runtime.getRuntime();
@@ -116,12 +131,23 @@ public class Phonedoor_daemon{
 							    runtime.exec(new String[] { "xfcse-screensaver &" }); // see http://ubuntuforums.org/showthread.php?t=1810262 for scrrensaver enable/disabele
 							//    sudo shutdown -s now
 							  }
-
 				  }
 			  }
-			  catch(UnknownHostException ue){					
+		/*	  catch(UnknownHostException ue){					
 				  JOptionPane.showMessageDialog(null,"error eerh" + 
-          ":\n" + ue.getLocalizedMessage());}
+          ":\n" + ue.getLocalizedMessage());} catch (UnsupportedAudioFileException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (LineUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} */catch (NoPlayerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (CannotRealizeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		  }
   }
   catch(java.net.BindException b){

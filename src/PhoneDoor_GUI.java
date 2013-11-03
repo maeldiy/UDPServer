@@ -46,7 +46,7 @@ public class PhoneDoor_GUI{
  
   public  PhoneDoor_GUI(List<String> config_data){
 
-	  lignes = config_data;
+  lignes = config_data;
   final String SERVERIP = "192.168.0.177"; // IP adress of arduino ethernet
   final int SERVERPORT = 8888;
 
@@ -197,11 +197,11 @@ public class PhoneDoor_GUI{
 					  OS = PlatformDetector.detect();
 						  if (OS == PlatformDetector.WINDOWS){
 			                  	lignes.set(1, String.valueOf(Newaudiofilepath));
-			                  	 Files.write(FileSystems.getDefault().getPath("C:\\Phone_door\\config.txt"), lignes, StandardCharsets.ISO_8859_1);
+			                  	 Files.write(FileSystems.getDefault().getPath(lignes.get(8)), lignes, StandardCharsets.ISO_8859_1);
 								}
 						  else {
 							    lignes.set(3, String.valueOf(Newaudiofilepath));
-							    Files.write(FileSystems.getDefault().getPath("/etc/config.txt"), lignes, StandardCharsets.UTF_8);
+							    Files.write(FileSystems.getDefault().getPath(lignes.get(10)), lignes, StandardCharsets.UTF_8);
 						  }
 			 	  }
 				  catch (Exception e) {
